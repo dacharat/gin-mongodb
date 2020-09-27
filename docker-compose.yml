@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  go-docker-image:
+    build: ./
+    image: gin-mongo
+    depends_on:
+      - db
+    ports:
+      - "3000:8080"
+    container_name: gin-mongo
+    environment:
+      MONGODB_HOST: mongodb://db
+    networks:
+      - gin-mongo
+    volumes:
+      - ./:/app
+
+  db:
+    image: mongo
+    container_name: gin-mongo-db
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-db:/data/db
+    networks:
+      - gin-mongo
+    restart: always
+
+volumes:
+  mongo-db:
+networks:
+  gin-mongo:
